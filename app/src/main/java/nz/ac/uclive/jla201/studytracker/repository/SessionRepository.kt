@@ -15,4 +15,9 @@ class SessionRepository(private val sessionDao: SessionDao) {
     suspend fun insert(session: Session) {
         sessionDao.insert(session)
     }
+
+    @WorkerThread
+    fun getTotalTimeForSubject(subjectId: Long): Long {
+        return sessionDao.getTotalTimeForSubject(subjectId)
+    }
 }

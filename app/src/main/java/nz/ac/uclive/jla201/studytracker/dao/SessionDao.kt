@@ -20,11 +20,14 @@ interface SessionDao {
     @Query("SELECT count(*) FROM session")
     fun getCount(): Flow<Int>
 
+    @Query("SELECT sum(session.duration) FROM session WHERE session.subject_id = :subjectId")
+    fun getTotalTimeForSubject(subjectId : Long): Long
+
     @Insert
     suspend fun insert(session: Session)
 
     @Insert
-    suspend fun insertAll(vararg subjects: Session)
+    suspend fun insertAll(vararg sessions: Session)
 
     @Delete
     suspend fun delete(session: Session)

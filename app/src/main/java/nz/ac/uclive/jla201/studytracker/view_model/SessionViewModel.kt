@@ -17,4 +17,8 @@ class SessionViewModel (private val sessionRepository: SessionRepository): ViewM
     fun addSession(session: Session) = viewModelScope.launch {
         sessionRepository.insert(session)
     }
+
+    fun calculateTimeForSubject(subjectId: Long): Long {
+        return sessionRepository.getTotalTimeForSubject(subjectId)
+    }
 }

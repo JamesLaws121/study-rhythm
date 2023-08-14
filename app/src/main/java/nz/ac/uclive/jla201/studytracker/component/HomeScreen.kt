@@ -1,4 +1,4 @@
-package nz.ac.uclive.jla201.studytracker.screen
+package nz.ac.uclive.jla201.studytracker.component
 
 import android.app.Activity
 import androidx.compose.foundation.background
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,12 +23,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.modifier.modifierLocalProvider
 import nz.ac.uclive.jla201.studytracker.activity.CreateSubjectActivity
 import nz.ac.uclive.jla201.studytracker.R
 import nz.ac.uclive.jla201.studytracker.Session
@@ -59,13 +57,14 @@ fun HomeScreen(){
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "StudyRhythm",
+            text = context.getString(R.string.app_name),
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
             fontSize = 50.sp
         )
+        Spacer(modifier = Modifier.height(50.dp))
         Text(
             text = "Your subjects",
             color = Color.Black,
@@ -95,7 +94,9 @@ fun HomeScreen(){
         Text(
             text = "Work sessions",
             color = Color.Black,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(30.dp),
             textAlign = TextAlign.Center,
             fontSize = 20.sp
         )
@@ -111,7 +112,7 @@ fun HomeScreen(){
             )
         }
 
-        if (subjects != null) {
+        if (subjects != null && !subjects.isEmpty()){
             Button(modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = { switchToSessionActivity(context, activity)
             }) {
@@ -136,10 +137,11 @@ fun HomeScreen(){
 fun SubjectList(subjects: List<Subject>) {
     LazyColumn {
         items(subjects) { subject ->
-            Box(Modifier
-                .border(1.dp, Color.Black)
-                .padding(10.dp)
-                .fillMaxWidth()){
+            Box(
+                Modifier
+                    .border(1.dp, Color.Black)
+                    .padding(10.dp)
+                    .fillMaxWidth()){
                 Text(
                     text = subject.name.orEmpty(),
                     fontSize = 20.sp,

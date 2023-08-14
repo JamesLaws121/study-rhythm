@@ -1,4 +1,4 @@
-package nz.ac.uclive.jla201.studytracker.screen
+package nz.ac.uclive.jla201.studytracker.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

@@ -32,10 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material.BottomNavigation;
 import androidx.compose.ui.unit.dp
-import nz.ac.uclive.jla201.studytracker.screen.HomeScreen
+import nz.ac.uclive.jla201.studytracker.component.HomeScreen
 import nz.ac.uclive.jla201.studytracker.util.NavItem
-import nz.ac.uclive.jla201.studytracker.screen.SettingsScreen
-import nz.ac.uclive.jla201.studytracker.screen.StatisticsScreen
+import nz.ac.uclive.jla201.studytracker.component.SettingsScreen
+import nz.ac.uclive.jla201.studytracker.component.StatisticsScreen
 import nz.ac.uclive.jla201.studytracker.ui.theme.StudyTrackerTheme
 
 class MainActivity : ComponentActivity() {
