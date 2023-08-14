@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import nz.ac.uclive.jla201.studytracker.dao.SessionDao
 import nz.ac.uclive.jla201.studytracker.dao.SubjectDao
+import nz.ac.uclive.jla201.studytracker.util.DateConverter
 
 @Database(entities = [Subject::class, Session::class], version = 1)
+@TypeConverters(DateConverter::class)
 abstract class StudyDatabase : RoomDatabase(){
     abstract fun subjectDao(): SubjectDao
     abstract fun sessionDao(): SessionDao

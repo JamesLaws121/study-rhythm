@@ -2,10 +2,11 @@
 
 
 ## Name
-Study tracker
+StudyRhythm
 
 ## Description
-An app desisned to let you track your study progress
+Introducing StudyRhythm: Your Ultimate Study Companion! Seamlessly manage your academic journey 
+with StudyRhythm, the innovative app designed to empower your learning experience.
 
 ## Visuals
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.

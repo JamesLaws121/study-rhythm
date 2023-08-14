@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b7218a83e676bc702bb3a774fae37c1f",
+    "identityHash": "81c125620c22b6812f7a3e89badf11ac",
     "entities": [
       {
         "tableName": "subject",
@@ -38,18 +38,12 @@
       },
       {
         "tableName": "session",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `description` TEXT, `start` TEXT, `end` TEXT, `subject_id` INTEGER, FOREIGN KEY(`id`) REFERENCES `subject`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `date` INTEGER NOT NULL, `start` INTEGER, `duration` INTEGER, `subject_id` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -59,15 +53,21 @@
             "notNull": false
           },
           {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "start",
             "columnName": "start",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
-            "fieldPath": "end",
-            "columnName": "end",
-            "affinity": "TEXT",
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -84,25 +84,13 @@
           ]
         },
         "indices": [],
-        "foreignKeys": [
-          {
-            "table": "subject",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b7218a83e676bc702bb3a774fae37c1f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '81c125620c22b6812f7a3e89badf11ac')"
     ]
   }
 }

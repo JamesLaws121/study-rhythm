@@ -59,7 +59,7 @@ fun HomeScreen(){
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "Home Screen",
+            text = "StudyRhythm",
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -160,7 +160,7 @@ fun SessionList(sessions: List<Session>) {
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = session.name.orEmpty(),
+                    text = session.description.orEmpty(),
                     fontSize = 20.sp,
                 )
             }

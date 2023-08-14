@@ -1,35 +1,25 @@
 package nz.ac.uclive.jla201.studytracker.activity
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.DatePicker
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,11 +32,13 @@ import nz.ac.uclive.jla201.studytracker.R
 import nz.ac.uclive.jla201.studytracker.Session
 import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication.Companion.sessionRepository
 import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication.Companion.subjectRepository
-import nz.ac.uclive.jla201.studytracker.Subject
-import nz.ac.uclive.jla201.studytracker.screen.SubjectList
-import nz.ac.uclive.jla201.studytracker.view_model.SubjectViewModel
 import nz.ac.uclive.jla201.studytracker.ui.theme.StudyTrackerTheme
 import nz.ac.uclive.jla201.studytracker.view_model.SessionViewModel
+import nz.ac.uclive.jla201.studytracker.view_model.SubjectViewModel
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class CreateSessionActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,6 +112,9 @@ fun SessionFormScreenView() {
                     LazyColumn(
                         modifier = Modifier
                             .wrapContentSize(Alignment.Center)
+                            .verticalScroll(rememberScrollState())
+                            .height(100.dp)
+                            .weight(1f)
                     )  {
                         items(subjects) { subject ->
                             val selected = selectedSubject == subject.id
@@ -155,50 +150,68 @@ fun SessionFormScreenView() {
                     )
                 }
 
-                var sessionNameInput by remember { mutableStateOf("") }
+                var descriptionInput by remember { mutableStateOf("") }
                 TextField(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(),
-                    value = sessionNameInput,
-                    onValueChange = { sessionNameInput = it },
-                    label = { Text("Session Name") }
-                )
-
-                var sessionDescriptionInput by remember { mutableStateOf("") }
-                TextField(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(),
-                    value = sessionDescriptionInput,
-                    onValueChange = { sessionDescriptionInput = it },
+                    value = descriptionInput,
+                    onValueChange = { descriptionInput = it },
                     label = { Text("Session Description") }
                 )
 
-                var sessionStartInput by remember { mutableStateOf("") }
-                TextField(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(),
-                    value = sessionStartInput,
-                    onValueChange = { sessionStartInput = it },
-                    label = { Text("Start time") }
+
+
+                val calendar = Calendar.getInstance()
+                val hour = calendar[Calendar.HOUR_OF_DAY]
+                val minute = calendar[Calendar.MINUTE]
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH)
+                val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+                var dateInput by remember { mutableStateOf(LocalDate.now()) }
+                val datePickerDialog = DatePickerDialog(
+                    context,
+                    { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+                        dateInput = LocalDate.of(year, month, dayOfMonth)
+                    }, year, month, day
+                )
+                Button(onClick = {
+                    datePickerDialog.show()
+                }){
+                    Text(text = "Choose Date",
+                        fontSize = 20.sp)
+                }
+
+                var startTimeInput by remember { mutableStateOf(LocalTime.now()) }
+                val mTimePickerDialog = TimePickerDialog(
+                    context,
+                    {_, hour : Int, minute: Int ->
+                        startTimeInput = LocalTime.of(hour, minute)
+                    }, hour, minute, false
                 )
 
-                var sessionEndInput by remember { mutableStateOf("") }
+                Button(
+                    onClick = { mTimePickerDialog.show() }
+                ) {
+                    Text("Set Time")
+                }
+
+
+                var durationInput by remember { mutableStateOf("") }
                 TextField(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(),
-                    value = sessionEndInput,
-                    onValueChange = { sessionEndInput = it },
-                    label = { Text("End time") }
+                    value = durationInput,
+                    onValueChange = { durationInput = it },
+                    label = { Text("Duration") }
                 )
+
                 Button(modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                    createSession(
-                        sessionNameInput, sessionDescriptionInput, sessionStartInput,
-                        sessionEndInput, selectedSubject, activity, context
+                    createSession(descriptionInput, dateInput , startTimeInput,
+                        durationInput, selectedSubject, activity, context
                     )
                 }) {
                     Text(text = "Submit",
@@ -209,11 +222,18 @@ fun SessionFormScreenView() {
     }
 }
 
-private fun createSession(name: String, description: String, start : String,
-                  end: String, subjectId: Int,  activity: Activity, context: Context,) {
+
+
+private fun createSession(description: String, startDate: LocalDate, startTime : LocalTime,
+                          durationString: String, subjectId: Int, activity: Activity, context: Context) {
     val sessionViewModel = SessionViewModel(sessionRepository)
-    sessionViewModel.addSession(Session(name = name, description = description, start = start,
-        end = end, subjectId = subjectId))
+
+
+    val durationFormat = DateTimeFormatter.ofPattern("hh:mm:ss")
+    val durationTime = LocalTime.parse(durationString).toNanoOfDay()
+
+    sessionViewModel.addSession(Session(description = description, date = startDate,
+        start = startTime.toNanoOfDay(), duration = durationTime, subjectId = subjectId))
 
     val intent = Intent(context, MainActivity::class.java)
     activity.finish()
