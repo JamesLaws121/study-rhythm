@@ -21,7 +21,7 @@ interface SessionDao {
     fun getCount(): Flow<Int>
 
     @Query("SELECT sum(session.duration) FROM session WHERE session.subject_id = :subjectId")
-    fun getTotalTimeForSubject(subjectId : Long): Long
+    fun getTotalTimeForSubject(subjectId : Int): Flow<Int>
 
     @Insert
     suspend fun insert(session: Session)

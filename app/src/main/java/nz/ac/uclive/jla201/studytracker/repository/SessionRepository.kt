@@ -17,7 +17,7 @@ class SessionRepository(private val sessionDao: SessionDao) {
     }
 
     @WorkerThread
-    fun getTotalTimeForSubject(subjectId: Long): Long {
+    fun getTotalTimeForSubject(subjectId: Int): Flow<Int> {
         return sessionDao.getTotalTimeForSubject(subjectId)
     }
 }

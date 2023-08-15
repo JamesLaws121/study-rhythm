@@ -2,17 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "81c125620c22b6812f7a3e89badf11ac",
+    "identityHash": "3ba382ab61fed74a6f88272d53da554c",
     "entities": [
       {
         "tableName": "subject",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `description` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `description` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "name",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "session",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `date` INTEGER NOT NULL, `start` INTEGER, `duration` INTEGER, `subject_id` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `date` INTEGER NOT NULL, `start` INTEGER, `duration` INTEGER, `subject_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -74,7 +74,7 @@
             "fieldPath": "subjectId",
             "columnName": "subject_id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -90,7 +90,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '81c125620c22b6812f7a3e89badf11ac')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3ba382ab61fed74a6f88272d53da554c')"
     ]
   }
 }

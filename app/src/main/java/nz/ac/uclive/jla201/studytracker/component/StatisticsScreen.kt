@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.sp
 //import android.graphics.Color
 import nz.ac.uclive.jla201.studytracker.R
 import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication
+import nz.ac.uclive.jla201.studytracker.Subject
 import nz.ac.uclive.jla201.studytracker.view_model.SessionViewModel
 import nz.ac.uclive.jla201.studytracker.view_model.SubjectViewModel
 
@@ -29,6 +31,13 @@ fun StatisticsScreen() {
     val context = LocalContext.current
     val subjectViewModel = SubjectViewModel(StudyTrackerApplication.subjectRepository)
     val sessionViewModel = SessionViewModel(StudyTrackerApplication.sessionRepository)
+
+    val subjects = subjectViewModel.subjects.observeAsState().value
+    val subjectTimes = subjects?.map {
+        sessionViewModel.calculateTimeForSubject(it.id).observeAsState().value
+    }
+
+
 
     val colors = listOf(
         Color(0xff6050dc),
@@ -53,14 +62,29 @@ fun StatisticsScreen() {
             textAlign = TextAlign.Center,
             fontSize = 20.sp
         )
-        PieChartScreen(colors)
+        if (!subjects.isNullOrEmpty() && !subjectTimes.isNullOrEmpty()) {
+            PieChartScreen(colors, subjects, subjectTimes)
+            BarChartScreen(colors, subjects, subjectTimes)
+        }
+
     }
 }
 
 @Composable
-internal fun PieChartScreen(colors : List<Color>) {
-    val inputValues = listOf(0.2F, 0.3F, 0.5F)
-    val inputTitles = listOf("Math", "English", "Science")
+internal fun PieChartScreen(colors : List<Color>, subjects : List<Subject>,
+                            inputs:List<Int?>) {
+
+    //val inputValues = listOf(5,5)
+    val inputTitles = subjects.map {
+        it.name
+    }
+    val inputValues:List<Int> = inputs.map {
+        if (it == null) {
+            0
+        } else {
+            it
+        }
+    }
 
     val chartColors = colors.slice(IntRange(0, inputTitles.size))
 
@@ -70,5 +94,16 @@ internal fun PieChartScreen(colors : List<Color>) {
         inputValues = inputValues,
         inputTitles = inputTitles,
     )
+}
 
+@Composable
+internal fun BarChartScreen(colors : List<Color>, subjects : List<Subject>,
+                            inputs:List<Int?>) {
+
+    val barChartInputsPercent = (0..10).map { (1..100).random().toFloat() }
+
+    BarChart(
+        modifier = Modifier.padding(20.dp),
+        values = barChartInputsPercent
+    )
 }

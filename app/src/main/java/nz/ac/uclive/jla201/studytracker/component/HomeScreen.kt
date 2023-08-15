@@ -23,9 +23,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.runtime.livedata.observeAsState
 import nz.ac.uclive.jla201.studytracker.activity.CreateSubjectActivity
@@ -49,13 +54,14 @@ fun HomeScreen(){
     val sessionViewModel = SessionViewModel(sessionRepository)
     val sessions = sessionViewModel.sessions.observeAsState().value
 
-    Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxSize()
-            .background(colorResource(id = R.color.white))
-            .wrapContentSize(Alignment.Center)
-    ) {
+
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .verticalScroll(rememberScrollState())
+        .height(IntrinsicSize.Max)
+        .background(colorResource(id = R.color.white))
+        .wrapContentSize(Alignment.Center))
+    {
         Text(
             text = context.getString(R.string.app_name),
             fontWeight = FontWeight.Bold,
@@ -85,10 +91,13 @@ fun HomeScreen(){
         }
 
         Button(modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = { switchToSubjectActivity(context, activity)
-        }) {
-            Text(text = "Add subject",
-                fontSize = 20.sp)
+            onClick = {
+                switchToSubjectActivity(context, activity)
+            }) {
+            Text(
+                text = "Add subject",
+                fontSize = 20.sp
+            )
         }
 
         Text(
@@ -112,12 +121,15 @@ fun HomeScreen(){
             )
         }
 
-        if (subjects != null && !subjects.isEmpty()){
+        if (!subjects.isNullOrEmpty()) {
             Button(modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { switchToSessionActivity(context, activity)
-            }) {
-                Text(text = "Log work session",
-                    fontSize = 20.sp)
+                onClick = {
+                    switchToSessionActivity(context, activity)
+                }) {
+                Text(
+                    text = "Log work session",
+                    fontSize = 20.sp
+                )
             }
         } else {
             Text(
@@ -128,18 +140,20 @@ fun HomeScreen(){
                 fontSize = 20.sp
             )
         }
-
     }
 }
 
 
 @Composable
 fun SubjectList(subjects: List<Subject>) {
-    LazyColumn {
+    LazyColumn(modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .padding(10.dp)
+        .height(125.dp)
+        .border(1.dp, Color.Black)) {
         items(subjects) { subject ->
             Box(
                 Modifier
-                    .border(1.dp, Color.Black)
                     .padding(10.dp)
                     .fillMaxWidth()){
                 Text(
@@ -153,11 +167,14 @@ fun SubjectList(subjects: List<Subject>) {
 
 @Composable
 fun SessionList(sessions: List<Session>) {
-    LazyColumn {
+    LazyColumn( modifier = Modifier
+        .border(1.dp, Color.Black)
+        .verticalScroll(rememberScrollState())
+        .padding(10.dp)
+        .height(125.dp)) {
         items(sessions) { session ->
             Box(
                 Modifier
-                    .border(1.dp, Color.Black)
                     .padding(10.dp)
                     .fillMaxWidth()
             ) {

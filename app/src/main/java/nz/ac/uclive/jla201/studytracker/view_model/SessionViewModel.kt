@@ -18,7 +18,7 @@ class SessionViewModel (private val sessionRepository: SessionRepository): ViewM
         sessionRepository.insert(session)
     }
 
-    fun calculateTimeForSubject(subjectId: Long): Long {
-        return sessionRepository.getTotalTimeForSubject(subjectId)
+    fun calculateTimeForSubject(subjectId: Int): LiveData<Int> {
+        return sessionRepository.getTotalTimeForSubject(subjectId).asLiveData()
     }
 }

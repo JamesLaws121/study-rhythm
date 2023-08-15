@@ -69,9 +69,10 @@ fun SessionFormScreenView() {
     Column(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxSize()
             .wrapContentSize(Alignment.TopCenter)
             .background(colorResource(id = R.color.white))
+            .verticalScroll(rememberScrollState())
+            .height(IntrinsicSize.Max)
     ) {
         Row(modifier = Modifier
             .wrapContentSize(Alignment.TopStart)
@@ -92,63 +93,133 @@ fun SessionFormScreenView() {
             Column(
                 modifier = Modifier
                     .wrapContentSize(Alignment.Center)
-                    .padding(30.dp)
+                    .padding(20.dp)
             ) {
-                Text(
+
+
+
+                Text(modifier = Modifier
+                    .wrapContentSize(Alignment.Center)
+                    .padding(10.dp),
                     text = "Create session",
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     fontSize = 40.sp
                 )
 
-                Text(
-                    text = "Choose Subject",
-                    color = Color.Black,
-                    textAlign = TextAlign.Center,
-                    fontSize = 25.sp
-                )
-                var selectedSubject by remember { mutableStateOf(-1) }
-                if (subjects != null && !subjects.isEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .wrapContentSize(Alignment.Center)
-                            .verticalScroll(rememberScrollState())
-                            .height(100.dp)
-                            .weight(1f)
-                    )  {
-                        items(subjects) { subject ->
-                            val selected = selectedSubject == subject.id
-                            Box(
-                                Modifier
-                                    .border(1.dp, Color.Black)
-                                    .fillMaxWidth()
-                                    .background(if (selected) Color.Cyan else Color.White)
-                                    .selectable(
-                                        selected = selected,
-                                        onClick = { selectedSubject = subject.id!! }
-                                    )
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(10.dp),
-                                    text = subject.name,
-                                    textAlign = TextAlign.Center,
-                                    fontSize = 20.sp
-                                )
-                            }
 
+                var selectedSubject by remember { mutableStateOf(-1) }
+                Column(modifier = Modifier
+                    .height(200.dp)
+                    .width(400.dp)) {
+                    Text(
+                        text = "Choose Subject",
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+                        fontSize = 25.sp
+                    )
+
+                    if (!subjects.isNullOrEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .border(1.dp, Color.Black)
+                                .wrapContentSize(Alignment.Center)
+                                .verticalScroll(rememberScrollState())
+                                .heightIn(25.dp, 175.dp)
+                                .fillMaxWidth()
+                        ) {
+                            items(subjects) { subject ->
+                                val selected = selectedSubject == subject.id
+                                Box(
+                                    Modifier
+                                        .border(1.dp, Color.Black)
+                                        .fillMaxWidth()
+                                        .background(if (selected) Color.Cyan else Color.White)
+                                        .selectable(
+                                            selected = selected,
+                                            onClick = { selectedSubject = subject.id }
+                                        )
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(10.dp),
+                                        text = subject.name,
+                                        textAlign = TextAlign.Center,
+                                        fontSize = 20.sp
+                                    )
+                                }
+
+                            }
+                        }
+                    } else {
+                        Text(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .fillMaxWidth(),
+                            text = "No subjects found",
+                            color = Color.Cyan,
+                            textAlign = TextAlign.Center,
+                            fontSize = 20.sp
+                        )
+                    }
+                }
+
+                var dateInput by remember { mutableStateOf(LocalDate.now()) }
+                var startTimeInput by remember { mutableStateOf(LocalTime.now()) }
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .padding(20.dp)) {
+
+                    Text(
+                        text = "Date & Time",
+                        fontSize = 25.sp
+                    )
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)) {
+                        val calendar = Calendar.getInstance()
+                        val hour = calendar[Calendar.HOUR_OF_DAY]
+                        val minute = calendar[Calendar.MINUTE]
+                        val year = calendar.get(Calendar.YEAR)
+                        val month = calendar.get(Calendar.MONTH)
+                        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+                        val datePickerDialog = DatePickerDialog(
+                            context,
+                            { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+                                dateInput = LocalDate.of(year, month, dayOfMonth)
+                            }, year, month, day
+                        )
+                        Button(onClick = {
+                            datePickerDialog.show()
+                        }) {
+                            Text(
+                                text = "" + dateInput,
+                                fontSize = 15.sp
+                            )
+                        }
+
+
+                        val mTimePickerDialog = TimePickerDialog(
+                            context,
+                            { _, hour: Int, minute: Int ->
+                                startTimeInput = LocalTime.of(hour, minute)
+                            }, hour, minute, false
+                        )
+
+                        Button(
+                            onClick = { mTimePickerDialog.show() }
+                        ) {
+                            Text(
+                                "%d : %d".format(startTimeInput.hour, startTimeInput.minute),
+                                fontSize = 15.sp
+                            )
                         }
                     }
-                } else {
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(),
-                        text = "No subjects found",
-                        color = Color.Cyan,
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp
-                    )
                 }
+
 
                 var descriptionInput by remember { mutableStateOf("") }
                 TextField(
@@ -160,51 +231,18 @@ fun SessionFormScreenView() {
                     label = { Text("Session Description") }
                 )
 
-
-
-                val calendar = Calendar.getInstance()
-                val hour = calendar[Calendar.HOUR_OF_DAY]
-                val minute = calendar[Calendar.MINUTE]
-                val year = calendar.get(Calendar.YEAR)
-                val month = calendar.get(Calendar.MONTH)
-                val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-                var dateInput by remember { mutableStateOf(LocalDate.now()) }
-                val datePickerDialog = DatePickerDialog(
-                    context,
-                    { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-                        dateInput = LocalDate.of(year, month, dayOfMonth)
-                    }, year, month, day
-                )
-                Button(onClick = {
-                    datePickerDialog.show()
-                }){
-                    Text(text = "Choose Date",
-                        fontSize = 20.sp)
-                }
-
-                var startTimeInput by remember { mutableStateOf(LocalTime.now()) }
-                val mTimePickerDialog = TimePickerDialog(
-                    context,
-                    {_, hour : Int, minute: Int ->
-                        startTimeInput = LocalTime.of(hour, minute)
-                    }, hour, minute, false
-                )
-
-                Button(
-                    onClick = { mTimePickerDialog.show() }
-                ) {
-                    Text("Set Time")
-                }
-
-
                 var durationInput by remember { mutableStateOf("") }
                 TextField(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(),
                     value = durationInput,
-                    onValueChange = { durationInput = it },
+
+                    onValueChange = { value ->
+                        if (value.length <= 2) {
+                            durationInput = value.filter { it.isDigit() }
+                        }
+                    },
                     label = { Text("Duration") }
                 )
 
@@ -215,7 +253,7 @@ fun SessionFormScreenView() {
                     )
                 }) {
                     Text(text = "Submit",
-                        fontSize = 20.sp)
+                        fontSize = 25.sp)
                 }
             }
         }
@@ -229,8 +267,9 @@ private fun createSession(description: String, startDate: LocalDate, startTime :
     val sessionViewModel = SessionViewModel(sessionRepository)
 
 
-    val durationFormat = DateTimeFormatter.ofPattern("hh:mm:ss")
-    val durationTime = LocalTime.parse(durationString).toNanoOfDay()
+    //val durationFormat = DateTimeFormatter.ofPattern("hh:mm:ss")
+    //val durationTime = LocalTime.parse(durationString).toNanoOfDay()
+    val durationTime = durationString.toLong()
 
     sessionViewModel.addSession(Session(description = description, date = startDate,
         start = startTime.toNanoOfDay(), duration = durationTime, subjectId = subjectId))
