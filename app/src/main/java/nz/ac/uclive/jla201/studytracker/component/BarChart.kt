@@ -12,9 +12,11 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import nz.ac.uclive.jla201.studytracker.R
 
 
 @Composable
@@ -27,8 +29,12 @@ internal fun BarChart(
     val borderColor = Color.Black
     val density = LocalDensity.current
     val strokeWidth = with(density) { 1.dp.toPx() }
-    val daysShorthand = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val maxValue = values.max()
+
+    val daysShorthand = listOf(stringResource(R.string.mon), stringResource(R.string.tue),
+        stringResource(R.string.wed), stringResource(R.string.thu), stringResource(R.string.fri),
+        stringResource(R.string.sat), stringResource(R.string.sun))
+
 
     Row(
         modifier = modifier.then(

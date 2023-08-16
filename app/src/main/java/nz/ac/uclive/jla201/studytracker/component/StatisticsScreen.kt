@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -79,7 +80,7 @@ fun StatisticsScreen() {
     ) {
 
         Text(
-            text = "Statistics",
+            text = stringResource(R.string.statistics),
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -104,7 +105,7 @@ fun StatisticsScreen() {
             )
         }
     } else {
-        Text(text = "You haven't got any stats to share")
+        Text(text = stringResource(R.string.you_haven_t_got_any_stats_to_share))
     }
     
 }
@@ -148,6 +149,7 @@ internal fun BarChartScreen(colors : List<Color>, inputs:List<Int?>) {
 @Composable
 fun summaryScreen(colors : List<Color>, subjects : List<Subject>,
                   subjectTimes:List<Float?>) {
+    //TODO
 }
 
 
@@ -161,10 +163,11 @@ fun sendStats(context: Context, subjects : List<Subject>,
         it ?: 0F
     }
     val timeValues:List<String> = inputValues.map {
-        it.toInt().toString() + " Hours " +  ((it - it.toInt())*60).toInt().toString() + " Minutes"
+        it.toInt().toString() + " " + context.getString(R.string.hours) + " " +
+                ((it - it.toInt())*60).toInt().toString() + " " + context.getString(R.string.minutes)
     }
 
-    var message = "Check out my StudyRhythm Stats:\n"
+    var message = context.getString(R.string.check_out_my_studyrhythm_stats)
 
     timeValues.forEachIndexed { index, value ->
         message += inputTitles[index] + " " + value + "\n"

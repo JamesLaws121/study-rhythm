@@ -3,7 +3,6 @@ package nz.ac.uclive.jla201.studytracker.component
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,6 +32,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.stringResource
 import nz.ac.uclive.jla201.studytracker.activity.CreateSubjectActivity
 import nz.ac.uclive.jla201.studytracker.R
 import nz.ac.uclive.jla201.studytracker.Session
@@ -76,7 +76,7 @@ fun HomeScreen(){
 
 
         Text(
-            text = "Your subjects",
+            text = stringResource(R.string.your_subjects),
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
@@ -86,7 +86,7 @@ fun HomeScreen(){
             SubjectList(subjects)
         } else {
             Text(
-                text = "No subjects found",
+                text = stringResource(R.string.no_subjects_found),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp
@@ -99,7 +99,7 @@ fun HomeScreen(){
             }) {
             Text(modifier = Modifier
                 .width(200.dp),
-                text = "Add subject",
+                text = stringResource(R.string.add_subject),
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center
             )
@@ -110,7 +110,7 @@ fun HomeScreen(){
 
 
         Text(
-            text = "Work sessions",
+            text = stringResource(R.string.work_sessions),
             color = Color.Black,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -125,7 +125,7 @@ fun HomeScreen(){
                 SessionList(sessions, subjectViewModel)
             } else {
                 Text(
-                    text = "No sessions found",
+                    text = stringResource(R.string.no_sessions_found),
                     color = Color.Black,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     textAlign = TextAlign.Center,
@@ -139,14 +139,14 @@ fun HomeScreen(){
                 }) {
                 Text(modifier = Modifier
                     .width(200.dp),
-                    text = "Log work session",
+                    text = stringResource(R.string.log_work_session),
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
             }
         } else {
             Text(
-                text = "No subjects to log for",
+                text = stringResource(R.string.no_subjects_to_log_for),
                 color = Color.Black,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,

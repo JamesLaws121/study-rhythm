@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">StudyRhythm</string>
+    <string name="back">Back</string>
+    <string name="create_session">Create session</string>
+    <string name="session_description">Session description</string>
+    <string name="choose_subject">Choose subject</string>
+    <string name="no_subjects_found">No subjects found</string>
+    <string name="date_occurred">Date occurred</string>
+    <string name="time_finished">Time finished</string>
+    <string name="duration">Duration</string>
+    <string name="hours">Hours</string>
+    <string name="minute">Minute</string>
+    <string name="submit">Submit</string>
+    <string name="create_subject">Create subject</string>
+    <string name="subject_name">Subject name</string>
+    <string name="subject_description">Subject description</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+    <string name="your_subjects">Your subjects</string>
+    <string name="add_subject">Add subject</string>
+    <string name="work_sessions">Work sessions</string>
+    <string name="no_sessions_found">No sessions found</string>
+    <string name="log_work_session">Log work session</string>
+    <string name="no_subjects_to_log_for">No subjects to log for</string>
+    <string name="settings">Settings</string>
+    <string name="remove_old_sessions">Remove old sessions</string>
+    <string name="sessions_will_be_removed_each_week">Sessions will be removed each week. \n</string>
+    <string name="statistics">Statistics</string>
+    <string name="you_haven_t_got_any_stats_to_share">You haven\'t got any stats to share</string>
+    <string name="check_out_my_studyrhythm_stats">Check out my StudyRhythm stats:\n</string>
+    <string name="minutes">Minutes</string>
 </resources>

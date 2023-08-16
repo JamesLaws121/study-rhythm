@@ -35,7 +35,7 @@ fun DonutChart(
     val chartDegrees = 360f
     var startAngle = 270f // start drawing clockwise (top to right)
 
-    // calculate each input slice degrees from the input percentage
+    // calculate each input slice degrees from the input
     val angleProgress = inputValues.map {
         (it * chartDegrees / inputValues.sum())
     }

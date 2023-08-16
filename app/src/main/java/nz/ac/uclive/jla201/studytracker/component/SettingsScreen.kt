@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,7 +45,7 @@ fun SettingsScreen() {
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "Settings",
+            text = stringResource(R.string.settings),
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -54,7 +55,7 @@ fun SettingsScreen() {
 
         Spacer(modifier = Modifier.height(50.dp))
         Text(
-            text = "Remove old sessions",
+            text = stringResource(R.string.remove_old_sessions),
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.Start),
@@ -62,7 +63,7 @@ fun SettingsScreen() {
             fontSize = 15.sp
         )
         Text(
-            text = "Sessions will be removed each week. \n",
+            text = stringResource(R.string.sessions_will_be_removed_each_week),
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.Start),

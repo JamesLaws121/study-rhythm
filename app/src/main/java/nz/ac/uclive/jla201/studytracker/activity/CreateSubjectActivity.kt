@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -88,7 +89,7 @@ fun SubjectFormScreenView() {
                     .wrapContentSize(Alignment.Center)
             ) {
                 Text(
-                    text = "Create subject",
+                    text = stringResource(R.string.create_subject),
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     fontSize = 40.sp
@@ -98,20 +99,20 @@ fun SubjectFormScreenView() {
                 TextField(
                     value = subjectNameInput,
                     onValueChange = { subjectNameInput = it },
-                    label = { Text("Subject Name") }
+                    label = { Text(stringResource(R.string.subject_name)) }
                 )
 
                 var subjectDescriptionInput by remember { mutableStateOf("") }
                 TextField(
                     value = subjectDescriptionInput,
                     onValueChange = { subjectDescriptionInput = it },
-                    label = { Text("Subject Description") }
+                    label = { Text(stringResource(R.string.subject_description)) }
                 )
                 Button(modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
                     createSubject(subjectNameInput, subjectDescriptionInput, activity, context)
                 }) {
-                    Text(text = "Submit",
+                    Text(text = stringResource(R.string.submit),
                         fontSize = 20.sp)
                 }
             }

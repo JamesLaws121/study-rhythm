@@ -1,12 +1,10 @@
 package nz.ac.uclive.jla201.studytracker.activity
 
-import android.R
+import android.R.id.content
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -71,7 +69,7 @@ class MainActivity : ComponentActivity() {
         if (hasFocus) {
             WindowCompat.setDecorFitsSystemWindows(window, false)
             WindowInsetsControllerCompat(window,
-                window.decorView.findViewById(R.id.content)).let { controller ->
+                window.decorView.findViewById(content)).let { controller ->
                 controller.hide(WindowInsetsCompat.Type.systemBars())
 
                 controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE

@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -81,7 +82,7 @@ fun SessionFormScreenView() {
             Button(
                 onClick = { returnToMain(activity, context) }
             ) {
-                Text("Back")
+                Text(stringResource(R.string.back))
             }
         }
 
@@ -101,7 +102,7 @@ fun SessionFormScreenView() {
                     modifier = Modifier
                         .wrapContentSize(Alignment.Center)
                         .padding(10.dp),
-                    text = "Create session",
+                    text = stringResource(R.string.create_session),
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     fontSize = 40.sp
@@ -116,7 +117,7 @@ fun SessionFormScreenView() {
                         .fillMaxWidth(),
                     value = descriptionInput,
                     onValueChange = { descriptionInput = it },
-                    label = { Text("Session Description") }
+                    label = { Text(stringResource(R.string.session_description)) }
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -128,7 +129,7 @@ fun SessionFormScreenView() {
                         .width(400.dp)
                 ) {
                     Text(
-                        text = "Choose Subject",
+                        text = stringResource(R.string.choose_subject),
                         color = Color.Black,
                         textAlign = TextAlign.Center,
                         fontSize = 25.sp
@@ -170,7 +171,7 @@ fun SessionFormScreenView() {
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .fillMaxWidth(),
-                            text = "No subjects found",
+                            text = stringResource(R.string.no_subjects_found),
                             color = Color.Cyan,
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp
@@ -204,7 +205,7 @@ fun SessionFormScreenView() {
                         ){
                             Column() {
                                 Text(
-                                    text = "Date occurred",
+                                    text = stringResource(R.string.date_occurred),
                                     fontSize = 15.sp
                                 )
 
@@ -236,7 +237,7 @@ fun SessionFormScreenView() {
                         ){
                             Column() {
                                 Text(
-                                    text = "Time finished",
+                                    text = stringResource(R.string.time_finished),
                                     fontSize = 15.sp
                                 )
 
@@ -269,7 +270,7 @@ fun SessionFormScreenView() {
                 var durationHourInput by remember { mutableStateOf("") }
                 var durationMinuteInput by remember { mutableStateOf("") }
                 Text(
-                    text = "Duration",
+                    text = stringResource(R.string.duration),
                     fontSize = 15.sp
                 )
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -287,7 +288,7 @@ fun SessionFormScreenView() {
                                     durationHourInput = value.filter { it.isDigit() }
                                 }
                             },
-                            label = { Text("Hours") }
+                            label = { Text(stringResource(R.string.hours)) }
                         )
                     }
 
@@ -306,7 +307,7 @@ fun SessionFormScreenView() {
                                     durationMinuteInput = value.filter { it.isDigit() }
                                 }
                             },
-                            label = { Text("Minute") }
+                            label = { Text(stringResource(R.string.minute)) }
                         )
                     }
                 }
@@ -317,7 +318,7 @@ fun SessionFormScreenView() {
                         durationHourInput, durationMinuteInput, selectedSubject, activity, context
                     )
                 }) {
-                    Text(text = "Submit",
+                    Text(text = stringResource(R.string.submit),
                         fontSize = 25.sp)
                 }
             }
