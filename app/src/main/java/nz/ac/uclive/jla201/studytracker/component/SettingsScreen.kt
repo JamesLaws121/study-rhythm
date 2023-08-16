@@ -61,29 +61,19 @@ fun SettingsScreen() {
             textAlign = TextAlign.Center,
             fontSize = 15.sp
         )
+        Text(
+            text = "This will happen ever 14 days",
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier.align(Alignment.Start),
+            textAlign = TextAlign.Center,
+            fontSize = 10.sp
+        )
         Switch(
             checked = deleteSessions == 1,
             onCheckedChange = { preferencesViewModel.saveDeletePreferences(it.compareTo(false));
                 deleteSessions = it.compareTo(false)
             }
         )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        var sessionLifeString = sessionLife.toString()
-        TextField(modifier = Modifier.width(200.dp),
-            value = sessionLifeString,
-            enabled = deleteSessions == 1,
-            onValueChange = { value ->
-                if (value.length <= 2) {
-                    sessionLifeString = value.filter { it.isDigit() }
-                    if (sessionLifeString.isNotEmpty()) {
-                        sessionLife = sessionLifeString.toInt()
-                        preferencesViewModel.saveSessionLife(sessionLife!!)
-                    }
-                }
-            },label = { Text("Days to keep") }
-        )
-
     }
 }
