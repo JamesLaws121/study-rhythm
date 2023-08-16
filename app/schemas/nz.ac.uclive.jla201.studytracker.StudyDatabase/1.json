@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3ba382ab61fed74a6f88272d53da554c",
+    "identityHash": "719c58bf2e4a0dc9582ad9498186c11c",
     "entities": [
       {
         "tableName": "subject",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "session",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `date` INTEGER NOT NULL, `start` INTEGER, `duration` INTEGER, `subject_id` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `description` TEXT, `date` INTEGER NOT NULL, `start` INTEGER, `duration` REAL, `subject_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -67,7 +67,7 @@
           {
             "fieldPath": "duration",
             "columnName": "duration",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
@@ -90,7 +90,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3ba382ab61fed74a6f88272d53da554c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '719c58bf2e4a0dc9582ad9498186c11c')"
     ]
   }
 }

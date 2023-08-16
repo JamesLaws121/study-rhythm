@@ -15,7 +15,7 @@ data class Session (
 
     @ColumnInfo(name = "start") var start: Long? = null,
 
-    @ColumnInfo(name = "duration") var duration: Long? = null,
+    @ColumnInfo(name = "duration") var duration: Float? = null,
 
     @ColumnInfo(name = "subject_id") var subjectId: Int
 )

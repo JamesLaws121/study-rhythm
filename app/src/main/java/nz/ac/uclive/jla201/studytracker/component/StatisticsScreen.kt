@@ -30,8 +30,8 @@ import java.util.*
 
 @Composable
 fun StatisticsScreen() {
-    val activity = LocalContext.current as Activity
-    val context = LocalContext.current
+    //val activity = LocalContext.current as Activity
+    //val context = LocalContext.current
     val subjectViewModel = SubjectViewModel(StudyTrackerApplication.subjectRepository)
     val sessionViewModel = SessionViewModel(StudyTrackerApplication.sessionRepository)
 

@@ -107,6 +107,8 @@ fun SessionFormScreenView() {
                     fontSize = 40.sp
                 )
 
+                Spacer(modifier = Modifier.height(20.dp))
+
                 var descriptionInput by remember { mutableStateOf("") }
                 TextField(
                     modifier = Modifier
@@ -117,11 +119,12 @@ fun SessionFormScreenView() {
                     label = { Text("Session Description") }
                 )
 
+                Spacer(modifier = Modifier.height(10.dp))
 
                 var selectedSubject by remember { mutableStateOf(-1) }
                 Column(
                     modifier = Modifier
-                        .height(200.dp)
+                        .height(125.dp)
                         .width(400.dp)
                 ) {
                     Text(
@@ -175,21 +178,17 @@ fun SessionFormScreenView() {
                     }
                 }
 
+                Spacer(modifier = Modifier.height(10.dp))
+
                 var dateInput by remember { mutableStateOf(LocalDate.now()) }
-                var startTimeInput by remember { mutableStateOf(LocalTime.now()) }
+                var timeInput by remember { mutableStateOf(LocalTime.now()) }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
-                        .padding(20.dp)
                 ) {
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
-                            .padding(20.dp)
-                    ) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
                         val calendar = Calendar.getInstance()
                         val hour = calendar[Calendar.HOUR_OF_DAY]
                         val minute = calendar[Calendar.MINUTE]
@@ -197,49 +196,68 @@ fun SessionFormScreenView() {
                         val month = calendar.get(Calendar.MONTH)
                         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-                        Column() {
-                            Text(
-                                text = "Date occurred",
-                                fontSize = 15.sp
-                            )
-
-                            val datePickerDialog = DatePickerDialog(
-                                context,
-                                { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-                                    dateInput = LocalDate.of(year, month+1, dayOfMonth)
-                                }, year, month, day
-                            )
-                            Button(onClick = {
-                                datePickerDialog.show()
-                            }) {
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(4.dp),
+                            contentAlignment = Alignment.TopCenter
+                        ){
+                            Column() {
                                 Text(
-                                    text = "" + dateInput,
+                                    text = "Date occurred",
                                     fontSize = 15.sp
                                 )
+
+                                val datePickerDialog = DatePickerDialog(
+                                    context,
+                                    { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+                                        dateInput = LocalDate.of(year, month+1, dayOfMonth)
+                                    }, year, month, day
+                                )
+                                Button(modifier = Modifier
+                                    .fillMaxWidth(),
+                                    onClick = {
+                                    datePickerDialog.show()
+                                }) {
+                                    Text(
+                                        text = "" + dateInput,
+                                        fontSize = 15.sp
+                                    )
+                                }
                             }
                         }
 
-                        Column() {
-                            Text(
-                                text = "Time finished",
-                                fontSize = 15.sp
-                            )
 
-                            val mTimePickerDialog = TimePickerDialog(
-                                context,
-                                { _, hour: Int, minute: Int ->
-                                    startTimeInput = LocalTime.of(hour, minute)
-                                }, hour, minute, false
-                            )
-
-                            Button(
-                                onClick = { mTimePickerDialog.show() }
-                            ) {
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(4.dp),
+                            contentAlignment = Alignment.TopCenter
+                        ){
+                            Column() {
                                 Text(
-                                    "%d : %d".format(startTimeInput.hour, startTimeInput.minute),
+                                    text = "Time finished",
                                     fontSize = 15.sp
                                 )
+
+                                val mTimePickerDialog = TimePickerDialog(
+                                    context,
+                                    { _, hour: Int, minute: Int ->
+                                        timeInput = LocalTime.of(hour, minute)
+                                    }, hour, minute, false
+                                )
+
+                                Button(modifier = Modifier
+                                    .fillMaxWidth(),
+                                    onClick = { mTimePickerDialog.show() }
+                                ) {
+                                    Text(
+                                        "%d : %d".format(timeInput.hour, timeInput.minute),
+                                        fontSize = 15.sp
+                                    )
+                                }
                             }
+
                         }
                     }
                 }
@@ -255,11 +273,10 @@ fun SessionFormScreenView() {
                     fontSize = 15.sp
                 )
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(8.dp),
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(8.dp),
                         contentAlignment = Alignment.TopCenter
                     ) {
                         TextField(
@@ -296,7 +313,7 @@ fun SessionFormScreenView() {
 
                 Button(modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                    createSession(descriptionInput, dateInput , startTimeInput,
+                    createSession(descriptionInput, dateInput , timeInput,
                         durationHourInput, durationMinuteInput, selectedSubject, activity, context
                     )
                 }) {
@@ -315,9 +332,12 @@ private fun createSession(description: String, startDate: LocalDate, startTime :
     val sessionViewModel = SessionViewModel(sessionRepository)
 
 
-    //val durationFormat = DateTimeFormatter.ofPattern("hh:mm:ss")
-    //val durationTime = LocalTime.parse(durationString).toNanoOfDay()
-    val durationTime = durationHourString.toLong() + (durationMinuteString.toLong()/60)
+
+
+
+    val durationTime = if(durationHourString.isNotEmpty()){ durationHourString.toFloat() }
+    else {0F} + if (durationMinuteString.isNotEmpty()){ durationMinuteString.toFloat() }
+    else { 0F } /60
 
     sessionViewModel.addSession(Session(description = description, date = startDate,
         start = startTime.toNanoOfDay(), duration = durationTime, subjectId = subjectId))
