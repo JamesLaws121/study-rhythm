@@ -1,11 +1,15 @@
 package nz.ac.uclive.jla201.studytracker.component
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -18,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import nz.ac.uclive.jla201.studytracker.R
 import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication
 import nz.ac.uclive.jla201.studytracker.Subject
@@ -31,7 +36,7 @@ import java.util.*
 @Composable
 fun StatisticsScreen() {
     //val activity = LocalContext.current as Activity
-    //val context = LocalContext.current
+    val context = LocalContext.current
     val subjectViewModel = SubjectViewModel(StudyTrackerApplication.subjectRepository)
     val sessionViewModel = SessionViewModel(StudyTrackerApplication.sessionRepository)
 
@@ -85,20 +90,34 @@ fun StatisticsScreen() {
             PieChartScreen(colors, subjects, subjectTimes)
             BarChartScreen(colors, dateTimes)
         }
-
     }
+    if (!subjects.isNullOrEmpty() && !subjectTimes.isNullOrEmpty()) {
+        Button(
+            onClick = {
+                sendStats(context, subjects, subjectTimes)
+            }) {
+            Text(modifier = Modifier
+                .width(200.dp),
+                text = "Share your stats",
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+    } else {
+        Text(text = "You haven't got any stats to share")
+    }
+    
 }
 
 @Composable
 internal fun PieChartScreen(colors : List<Color>, subjects : List<Subject>,
-                            inputs:List<Int?>) {
+                            inputs:List<Float?>) {
 
-    //val inputValues = listOf(5,5)
     val inputTitles = subjects.map {
         it.name
     }
-    val inputValues:List<Int> = inputs.map {
-        it ?: 0
+    val inputValues:List<Float> = inputs.map {
+        it ?: 0F
     }
 
     val chartColors = colors.slice(IntRange(0, inputTitles.size))
@@ -124,4 +143,39 @@ internal fun BarChartScreen(colors : List<Color>, inputs:List<Int?>) {
         colors = colors,
         maxHeight = 200
     )
+}
+
+@Composable
+fun summaryScreen(colors : List<Color>, subjects : List<Subject>,
+                  subjectTimes:List<Float?>) {
+}
+
+
+fun sendStats(context: Context, subjects : List<Subject>,
+              subjectTimes:List<Float?>) {
+
+    val inputTitles = subjects.map {
+        it.name
+    }
+    val inputValues:List<Float> = subjectTimes.map {
+        it ?: 0F
+    }
+    val timeValues:List<String> = inputValues.map {
+        it.toInt().toString() + " Hours " +  ((it - it.toInt())*60).toInt().toString() + " Minutes"
+    }
+
+    var message = "Check out my StudyRhythm Stats:\n"
+
+    timeValues.forEachIndexed { index, value ->
+        message += inputTitles[index] + " " + value + "\n"
+    }
+
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, message)
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    context.startActivity(shareIntent)
 }

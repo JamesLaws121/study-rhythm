@@ -62,7 +62,7 @@ fun SettingsScreen() {
             fontSize = 15.sp
         )
         Text(
-            text = "This will happen ever 14 days",
+            text = "Sessions will be removed each week. \n",
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.Start),

@@ -19,11 +19,15 @@ class SessionViewModel (private val sessionRepository: SessionRepository): ViewM
         sessionRepository.insert(session)
     }
 
-    fun calculateTimeForSubject(subjectId: Int): LiveData<Int> {
+    fun calculateTimeForSubject(subjectId: Int): LiveData<Float> {
         return sessionRepository.getTotalTimeForSubject(subjectId).asLiveData()
     }
 
     fun calculateTimeForDate(date: Long): LiveData<Int> {
         return sessionRepository.getTotalTimeForDate(date).asLiveData()
+    }
+
+    fun removeOldSessions(date: Long) = viewModelScope.launch {
+        sessionRepository.removeOldSessions(date)
     }
 }

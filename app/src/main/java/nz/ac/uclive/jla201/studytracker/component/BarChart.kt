@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -26,7 +27,7 @@ internal fun BarChart(
     val borderColor = Color.Black
     val density = LocalDensity.current
     val strokeWidth = with(density) { 1.dp.toPx() }
-    val daysShorthand = listOf("mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    val daysShorthand = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val maxValue = values.max()
 
     Row(
@@ -69,10 +70,19 @@ internal fun BarChart(
                 )
             }
         }
-        Row() {
-            daysShorthand.forEach() {day ->
-                Text(text = day)
-            }
+    }
+    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,) {
+        daysShorthand.forEachIndexed() {index, day ->
+            Text(modifier = Modifier
+                .height(25.dp)
+                .padding(horizontal = 5.dp)
+                .width(10.dp)
+                .weight(1f)
+                .background(colors[index])
+                .align(Alignment.Bottom),
+                text = day,
+                textAlign = TextAlign.Center)
         }
     }
 }

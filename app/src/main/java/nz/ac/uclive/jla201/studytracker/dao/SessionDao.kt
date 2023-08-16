@@ -22,10 +22,13 @@ interface SessionDao {
     fun getCount(): Flow<Int>
 
     @Query("SELECT sum(session.duration) FROM session WHERE session.subject_id = :subjectId")
-    fun getTotalTimeForSubject(subjectId : Int): Flow<Int>
+    fun getTotalTimeForSubject(subjectId : Int): Flow<Float>
 
     @Query("SELECT sum(session.duration) FROM session WHERE session.date = :date")
     fun getTotalTimeForDate(date: Long): Flow<Int>
+
+    @Query("DELETE FROM session WHERE session.date < :date")
+    suspend fun removeBeforeDate(date: Long)
 
     @Insert
     suspend fun insert(session: Session)

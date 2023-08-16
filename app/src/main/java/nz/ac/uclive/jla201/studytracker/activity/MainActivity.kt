@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material.BottomNavigation;
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -44,10 +45,15 @@ import nz.ac.uclive.jla201.studytracker.util.NavItem
 import nz.ac.uclive.jla201.studytracker.component.SettingsScreen
 import nz.ac.uclive.jla201.studytracker.component.StatisticsScreen
 import nz.ac.uclive.jla201.studytracker.ui.theme.StudyTrackerTheme
+import nz.ac.uclive.jla201.studytracker.view_model.PreferencesViewModel
+import nz.ac.uclive.jla201.studytracker.view_model.SessionViewModel
+import java.time.ZoneId
+import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             StudyTrackerTheme {
                 // A surface container using the 'background' color from the theme
@@ -76,6 +82,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreenView() {
+    val sessionViewModel = SessionViewModel(StudyTrackerApplication.sessionRepository)
+    val preferencesViewModel = PreferencesViewModel(StudyTrackerApplication.preferencesRepository)
+    val deleteSessions = preferencesViewModel.getDeletePreferences().observeAsState().value
+    val calendar = Calendar.getInstance()
+    calendar.firstDayOfWeek = Calendar.MONDAY
+    calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
+    if (deleteSessions == 1) {
+        sessionViewModel.removeOldSessions((calendar.time.toInstant()
+            .atZone(ZoneId.systemDefault()).toLocalDate().toEpochDay()))
+    }
+
+
     val navController = rememberNavController();
     NavBarMap (navController);
     Column(modifier = Modifier) {

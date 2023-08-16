@@ -30,7 +30,7 @@ fun DonutChart(
     modifier: Modifier = Modifier,
     colors: List<Color>,
     inputTitles: List<String>,
-    inputValues: List<Int>,
+    inputValues: List<Float>,
 ) {
     val chartDegrees = 360f
     var startAngle = 270f // start drawing clockwise (top to right)

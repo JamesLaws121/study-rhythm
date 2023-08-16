@@ -18,12 +18,17 @@ class SessionRepository(private val sessionDao: SessionDao) {
     }
 
     @WorkerThread
-    fun getTotalTimeForSubject(subjectId: Int): Flow<Int> {
+    fun getTotalTimeForSubject(subjectId: Int): Flow<Float> {
         return sessionDao.getTotalTimeForSubject(subjectId)
     }
 
     @WorkerThread
     fun getTotalTimeForDate(date: Long): Flow<Int> {
         return sessionDao.getTotalTimeForDate(date)
+    }
+
+    @WorkerThread
+    suspend fun removeOldSessions(date: Long) {
+        sessionDao.removeBeforeDate(date)
     }
 }
