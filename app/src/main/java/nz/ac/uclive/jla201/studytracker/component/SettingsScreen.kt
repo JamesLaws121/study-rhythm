@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,7 +30,21 @@ fun SettingsScreen() {
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
-            fontSize = 20.sp
+            fontSize = 50.sp
+        )
+
+        Text(
+            text = "Remove old sessions",
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 10.sp
+        )
+        var switchCheckedState = false
+        Switch(
+            checked = switchCheckedState,
+            onCheckedChange = { switchCheckedState = it }
         )
     }
 }

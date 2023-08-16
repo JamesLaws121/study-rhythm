@@ -7,6 +7,7 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import nz.ac.uclive.jla201.studytracker.Session
 import nz.ac.uclive.jla201.studytracker.Subject
+import java.time.LocalDate
 
 
 @Dao
@@ -22,6 +23,9 @@ interface SessionDao {
 
     @Query("SELECT sum(session.duration) FROM session WHERE session.subject_id = :subjectId")
     fun getTotalTimeForSubject(subjectId : Int): Flow<Int>
+
+    @Query("SELECT sum(session.duration) FROM session WHERE session.date = :date")
+    fun getTotalTimeForDate(date: Long): Flow<Int>
 
     @Insert
     suspend fun insert(session: Session)

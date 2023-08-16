@@ -8,12 +8,12 @@ import java.util.Date
 
 class DateConverter {
     @TypeConverter
-    fun toDate(dateLong: Long?): LocalDate? {
-        return dateLong?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate() };
+    fun toDate(dateLong: Long): LocalDate {
+        return LocalDate.ofEpochDay(dateLong)
     }
 
     @TypeConverter
-    fun fromDate(date: LocalDate?): Long? {
-        return date?.toEpochDay()
+    fun fromDate(date: LocalDate): Long {
+        return date.toEpochDay()
     }
 }

@@ -16,6 +16,9 @@ interface SubjectDao {
     @Query("SELECT * FROM subject WHERE subject.id IN (:subjectIds)")
     fun loadAllByIds(subjectIds: IntArray): Flow<List<Subject>>
 
+    @Query("SELECT * FROM subject WHERE subject.id = :subjectId")
+    fun findById(subjectId: Int): Flow<Subject>
+
     @Query("SELECT count(*) FROM subject")
     fun getCount(): Flow<Int>
 

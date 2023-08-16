@@ -17,4 +17,8 @@ class SubjectViewModel(private val subjectRepository: SubjectRepository): ViewMo
     fun addSubject(subject: Subject) = viewModelScope.launch {
         subjectRepository.insert(subject)
     }
+
+    fun getSubject(subjectId: Int): LiveData<Subject> {
+        return subjectRepository.findById(subjectId).asLiveData()
+    }
 }

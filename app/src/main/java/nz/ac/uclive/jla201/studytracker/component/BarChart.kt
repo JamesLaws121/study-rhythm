@@ -1,14 +1,9 @@
 package nz.ac.uclive.jla201.studytracker.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,23 +15,25 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-private val defaultMaxHeight = 200.dp
 
 @Composable
 internal fun BarChart(
     modifier: Modifier = Modifier,
     values: List<Float>,
-    maxHeight: Dp = defaultMaxHeight
+    colors: List<Color>,
+    maxHeight: Int
 ) {
-    val borderColor = MaterialTheme.colorScheme.primary
+    val borderColor = Color.Black
     val density = LocalDensity.current
     val strokeWidth = with(density) { 1.dp.toPx() }
+    val daysShorthand = listOf("mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    val maxValue = values.max()
 
     Row(
         modifier = modifier.then(
             Modifier
                 .fillMaxWidth()
-                .height(maxHeight)
+                .height(maxHeight.dp)
                 .drawBehind {
                     // draw X-Axis
                     drawLine(
@@ -58,32 +55,24 @@ internal fun BarChart(
         verticalAlignment = Alignment.Bottom
     ) {
         Row() {
-            values.forEach { item ->
-                Bar(
-                    value = item,
-                    color = MaterialTheme.colorScheme.primary,
-                    maxHeight = maxHeight
+            values.forEachIndexed() {index, value ->
+                val itemHeight = remember(value) { (value/maxValue) * maxHeight }
+
+                Spacer(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .height(itemHeight.dp)
+                        .width(10.dp)
+                        .weight(1f)
+                        .background(colors[index])
+                        .align(Alignment.Bottom)
                 )
             }
         }
+        Row() {
+            daysShorthand.forEach() {day ->
+                Text(text = day)
+            }
+        }
     }
-}
-
-@Composable
-fun RowScope.Bar(
-    value: Float,
-    color: Color,
-    maxHeight: Dp
-) {
-
-    val itemHeight = remember(value) { value * maxHeight.value / 100 }
-
-    Spacer(
-        modifier = Modifier
-            .padding(horizontal = 5.dp)
-            .height(itemHeight.dp)
-            .weight(1f)
-            .background(color)
-    )
-
 }

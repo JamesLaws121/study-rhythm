@@ -42,6 +42,7 @@ import nz.ac.uclive.jla201.studytracker.Subject
 import nz.ac.uclive.jla201.studytracker.activity.CreateSessionActivity
 import nz.ac.uclive.jla201.studytracker.view_model.SessionViewModel
 import nz.ac.uclive.jla201.studytracker.view_model.SubjectViewModel
+import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -62,6 +63,7 @@ fun HomeScreen(){
         .background(colorResource(id = R.color.white))
         .wrapContentSize(Alignment.Center))
     {
+
         Text(
             text = context.getString(R.string.app_name),
             fontWeight = FontWeight.Bold,
@@ -71,6 +73,8 @@ fun HomeScreen(){
             fontSize = 50.sp
         )
         Spacer(modifier = Modifier.height(50.dp))
+
+
         Text(
             text = "Your subjects",
             color = Color.Black,
@@ -78,12 +82,11 @@ fun HomeScreen(){
             textAlign = TextAlign.Center,
             fontSize = 30.sp
         )
-        if (subjects != null) {
+        if (!subjects.isNullOrEmpty()) {
             SubjectList(subjects)
         } else {
             Text(
                 text = "No subjects found",
-                color = Color.Cyan,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp
@@ -92,13 +95,19 @@ fun HomeScreen(){
 
         Button(modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
-                switchToSubjectActivity(context, activity)
+                switchToSubjectActivity(context)
             }) {
-            Text(
+            Text(modifier = Modifier
+                .width(200.dp),
                 text = "Add subject",
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center
             )
         }
+
+
+        Spacer(modifier = Modifier.height(50.dp))
+
 
         Text(
             text = "Work sessions",
@@ -107,28 +116,32 @@ fun HomeScreen(){
                 .align(Alignment.CenterHorizontally)
                 .padding(30.dp),
             textAlign = TextAlign.Center,
-            fontSize = 20.sp
+            fontSize = 30.sp
         )
-        if (sessions != null) {
-            SessionList(sessions)
-        } else {
-            Text(
-                text = "No sessions found",
-                color = Color.Black,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
-            )
-        }
+
 
         if (!subjects.isNullOrEmpty()) {
+            if (!sessions.isNullOrEmpty()) {
+                SessionList(sessions, subjectViewModel)
+            } else {
+                Text(
+                    text = "No sessions found",
+                    color = Color.Black,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp
+                )
+            }
+
             Button(modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    switchToSessionActivity(context, activity)
+                    switchToSessionActivity(context)
                 }) {
-                Text(
+                Text(modifier = Modifier
+                    .width(200.dp),
                     text = "Log work session",
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
                 )
             }
         } else {
@@ -166,7 +179,7 @@ fun SubjectList(subjects: List<Subject>) {
 }
 
 @Composable
-fun SessionList(sessions: List<Session>) {
+fun SessionList(sessions: List<Session>, subjectViewModel: SubjectViewModel) {
     LazyColumn( modifier = Modifier
         .border(1.dp, Color.Black)
         .verticalScroll(rememberScrollState())
@@ -178,8 +191,9 @@ fun SessionList(sessions: List<Session>) {
                     .padding(10.dp)
                     .fillMaxWidth()
             ) {
+                val subject = subjectViewModel.getSubject(session.subjectId).observeAsState().value?.name
                 Text(
-                    text = session.description.orEmpty(),
+                    text = subject + "   " + session.date.format(DateTimeFormatter.ISO_LOCAL_DATE) + "   " +  session.duration + " hours",
                     fontSize = 20.sp,
                 )
             }
@@ -187,14 +201,12 @@ fun SessionList(sessions: List<Session>) {
     }
 }
 
-fun switchToSubjectActivity(context: Context, activity: Activity) {
+fun switchToSubjectActivity(context: Context) {
     val intent = Intent(context, CreateSubjectActivity::class.java)
-    activity.finish()
     context.startActivity(intent)
 }
 
-fun switchToSessionActivity(context: Context, activity: Activity) {
+fun switchToSessionActivity(context: Context) {
     val intent = Intent(context, CreateSessionActivity::class.java)
-    activity.finish()
     context.startActivity(intent)
 }

@@ -97,21 +97,33 @@ fun SessionFormScreenView() {
             ) {
 
 
-
-                Text(modifier = Modifier
-                    .wrapContentSize(Alignment.Center)
-                    .padding(10.dp),
+                Text(
+                    modifier = Modifier
+                        .wrapContentSize(Alignment.Center)
+                        .padding(10.dp),
                     text = "Create session",
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     fontSize = 40.sp
                 )
 
+                var descriptionInput by remember { mutableStateOf("") }
+                TextField(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(),
+                    value = descriptionInput,
+                    onValueChange = { descriptionInput = it },
+                    label = { Text("Session Description") }
+                )
+
 
                 var selectedSubject by remember { mutableStateOf(-1) }
-                Column(modifier = Modifier
-                    .height(200.dp)
-                    .width(400.dp)) {
+                Column(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .width(400.dp)
+                ) {
                     Text(
                         text = "Choose Subject",
                         color = Color.Black,
@@ -165,20 +177,19 @@ fun SessionFormScreenView() {
 
                 var dateInput by remember { mutableStateOf(LocalDate.now()) }
                 var startTimeInput by remember { mutableStateOf(LocalTime.now()) }
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-                    .padding(20.dp)) {
-
-                    Text(
-                        text = "Date & Time",
-                        fontSize = 25.sp
-                    )
-
-                    Row(modifier = Modifier
+                Column(
+                    modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally)
-                        .padding(20.dp)) {
+                        .padding(20.dp)
+                ) {
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
+                            .padding(20.dp)
+                    ) {
                         val calendar = Calendar.getInstance()
                         val hour = calendar[Calendar.HOUR_OF_DAY]
                         val minute = calendar[Calendar.MINUTE]
@@ -186,70 +197,107 @@ fun SessionFormScreenView() {
                         val month = calendar.get(Calendar.MONTH)
                         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-                        val datePickerDialog = DatePickerDialog(
-                            context,
-                            { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-                                dateInput = LocalDate.of(year, month, dayOfMonth)
-                            }, year, month, day
-                        )
-                        Button(onClick = {
-                            datePickerDialog.show()
-                        }) {
+                        Column() {
                             Text(
-                                text = "" + dateInput,
+                                text = "Date occurred",
                                 fontSize = 15.sp
                             )
+
+                            val datePickerDialog = DatePickerDialog(
+                                context,
+                                { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+                                    dateInput = LocalDate.of(year, month+1, dayOfMonth)
+                                }, year, month, day
+                            )
+                            Button(onClick = {
+                                datePickerDialog.show()
+                            }) {
+                                Text(
+                                    text = "" + dateInput,
+                                    fontSize = 15.sp
+                                )
+                            }
                         }
 
-
-                        val mTimePickerDialog = TimePickerDialog(
-                            context,
-                            { _, hour: Int, minute: Int ->
-                                startTimeInput = LocalTime.of(hour, minute)
-                            }, hour, minute, false
-                        )
-
-                        Button(
-                            onClick = { mTimePickerDialog.show() }
-                        ) {
+                        Column() {
                             Text(
-                                "%d : %d".format(startTimeInput.hour, startTimeInput.minute),
+                                text = "Time finished",
                                 fontSize = 15.sp
                             )
+
+                            val mTimePickerDialog = TimePickerDialog(
+                                context,
+                                { _, hour: Int, minute: Int ->
+                                    startTimeInput = LocalTime.of(hour, minute)
+                                }, hour, minute, false
+                            )
+
+                            Button(
+                                onClick = { mTimePickerDialog.show() }
+                            ) {
+                                Text(
+                                    "%d : %d".format(startTimeInput.hour, startTimeInput.minute),
+                                    fontSize = 15.sp
+                                )
+                            }
                         }
                     }
                 }
 
 
-                var descriptionInput by remember { mutableStateOf("") }
-                TextField(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(),
-                    value = descriptionInput,
-                    onValueChange = { descriptionInput = it },
-                    label = { Text("Session Description") }
-                )
 
-                var durationInput by remember { mutableStateOf("") }
-                TextField(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(),
-                    value = durationInput,
 
-                    onValueChange = { value ->
-                        if (value.length <= 2) {
-                            durationInput = value.filter { it.isDigit() }
-                        }
-                    },
-                    label = { Text("Duration") }
+
+                var durationHourInput by remember { mutableStateOf("") }
+                var durationMinuteInput by remember { mutableStateOf("") }
+                Text(
+                    text = "Duration",
+                    fontSize = 15.sp
                 )
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(8.dp),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
+                        TextField(
+                            value = durationHourInput,
+
+                            onValueChange = { value ->
+                                if (value.length <= 2) {
+                                    durationHourInput = value.filter { it.isDigit() }
+                                }
+                            },
+                            label = { Text("Hours") }
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(8.dp),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
+                        TextField(
+                            value = durationMinuteInput,
+
+                            onValueChange = { value ->
+                                if (value.length <= 2) {
+                                    durationMinuteInput = value.filter { it.isDigit() }
+                                }
+                            },
+                            label = { Text("Minute") }
+                        )
+                    }
+                }
 
                 Button(modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
                     createSession(descriptionInput, dateInput , startTimeInput,
-                        durationInput, selectedSubject, activity, context
+                        durationHourInput, durationMinuteInput, selectedSubject, activity, context
                     )
                 }) {
                     Text(text = "Submit",
@@ -263,13 +311,13 @@ fun SessionFormScreenView() {
 
 
 private fun createSession(description: String, startDate: LocalDate, startTime : LocalTime,
-                          durationString: String, subjectId: Int, activity: Activity, context: Context) {
+                          durationHourString: String, durationMinuteString: String, subjectId: Int, activity: Activity, context: Context) {
     val sessionViewModel = SessionViewModel(sessionRepository)
 
 
     //val durationFormat = DateTimeFormatter.ofPattern("hh:mm:ss")
     //val durationTime = LocalTime.parse(durationString).toNanoOfDay()
-    val durationTime = durationString.toLong()
+    val durationTime = durationHourString.toLong() + (durationMinuteString.toLong()/60)
 
     sessionViewModel.addSession(Session(description = description, date = startDate,
         start = startTime.toNanoOfDay(), duration = durationTime, subjectId = subjectId))

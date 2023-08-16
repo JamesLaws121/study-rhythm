@@ -1,9 +1,12 @@
 package nz.ac.uclive.jla201.studytracker.activity
 
+import android.R
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -32,6 +35,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material.BottomNavigation;
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication
 import nz.ac.uclive.jla201.studytracker.component.HomeScreen
 import nz.ac.uclive.jla201.studytracker.util.NavItem
 import nz.ac.uclive.jla201.studytracker.component.SettingsScreen
@@ -50,6 +57,18 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreenView();
                 }
+            }
+        }
+    }
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            WindowInsetsControllerCompat(window,
+                window.decorView.findViewById(R.id.content)).let { controller ->
+                controller.hide(WindowInsetsCompat.Type.systemBars())
+
+                controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
         }
     }

@@ -1,7 +1,9 @@
 package nz.ac.uclive.jla201.studytracker.repository
 
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import nz.ac.uclive.jla201.studytracker.dao.SubjectDao
 import nz.ac.uclive.jla201.studytracker.Subject
 
@@ -12,5 +14,10 @@ class SubjectRepository(private val subjectDao: SubjectDao) {
     @WorkerThread
     suspend fun insert(subject: Subject) {
         subjectDao.insert(subject)
+    }
+
+    @WorkerThread
+    fun findById(subjectId: Int): Flow<Subject> {
+        return subjectDao.findById(subjectId)
     }
 }
