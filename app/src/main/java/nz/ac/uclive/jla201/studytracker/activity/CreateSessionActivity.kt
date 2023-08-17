@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -24,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -332,6 +332,7 @@ private fun createSession(description: String, startDate: LocalDate, startTime :
     sessionViewModel.addSession(Session(description = description, date = startDate,
         start = startTime.toNanoOfDay(), duration = durationTime, subjectId = subjectId))
 
+    Toast.makeText(context, "Session logged.", Toast.LENGTH_SHORT).show()
     val intent = Intent(context, MainActivity::class.java)
     activity.finish()
     context.startActivity(intent)
