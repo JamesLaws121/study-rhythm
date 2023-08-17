@@ -241,7 +241,7 @@ fun SessionList(sessions: List<Session>, subjectViewModel: SubjectViewModel) {
             ) {
 
                 Text(
-                    text = String.format("%s  %s  %.2f" + +R.string.hours, subject, session.date.format(DateTimeFormatter.ISO_LOCAL_DATE), session.duration ),
+                    text = String.format("%s %s %.2f" + stringResource(R.string.hours), subject, session.date.format(DateTimeFormatter.ISO_LOCAL_DATE), session.duration ),
                     fontSize = 20.sp,
                 )
             }
@@ -260,7 +260,7 @@ fun SessionList(sessions: List<Session>, subjectViewModel: SubjectViewModel) {
                 Column() {
                     selectedSession.description?.let { Text(text = it) }
                     Text(text = selectedSession.date.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                    Text(text = String.format("%.2f "+R.string.hours, selectedSession.duration))
+                    Text(text = String.format("%.2f "+ stringResource(R.string.hours), selectedSession.duration))
                     Text(text = selectedSessionSubject)
                 }
 
