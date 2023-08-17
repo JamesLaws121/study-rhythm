@@ -9,14 +9,9 @@ import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication.Companion.userPr
 
 class PreferencesRepository(private val context: Context) {
     private val deleteSessionsKey = intPreferencesKey("delete_session")
-    private val sessionLifeKey = intPreferencesKey("session_session")
 
     val deleteSession: Flow<Int> = context.userPreferences.data.map { preferences ->
         preferences[deleteSessionsKey] ?: 0
-    }
-
-    val sessionLife: Flow<Int> = context.userPreferences.data.map { preferences ->
-        preferences[sessionLifeKey] ?: 0
     }
 
     suspend fun saveDeletePreferences(newPreference : Int) {
@@ -25,9 +20,4 @@ class PreferencesRepository(private val context: Context) {
         }
     }
 
-    suspend fun saveSessionLife(newPreference : Int) {
-        context.userPreferences.edit { preferences ->
-            preferences[sessionLifeKey] = newPreference
-        }
-    }
 }

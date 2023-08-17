@@ -32,6 +32,11 @@
     <string name="sessions_will_be_removed_each_week">Sessions will be removed each week. \n</string>
     <string name="statistics">Statistics</string>
     <string name="you_haven_t_got_any_stats_to_share">You haven\'t got any stats to share</string>
-    <string name="check_out_my_studyrhythm_stats">Check out my StudyRhythm stats:\n</string>
+    <string name="check_out_my_study_rhythm_stats">Check out my StudyRhythm stats:\n</string>
     <string name="minutes">Minutes</string>
+    <string name="work_session">Work session</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="you_dont_have_any_stats_yet">You don\'t have any stats yet.</string>
+    <string name="share_your_stats">Share your stats</string>
+    <string name="home">Home</string>
 </resources>

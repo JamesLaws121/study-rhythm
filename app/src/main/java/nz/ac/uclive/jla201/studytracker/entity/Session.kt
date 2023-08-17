@@ -1,13 +1,11 @@
 package nz.ac.uclive.jla201.studytracker
 
 import androidx.room.*
-import nz.ac.uclive.jla201.studytracker.util.DateConverter
 import java.time.LocalDate
-import java.util.*
 
 @Entity(tableName = "session")
 data class Session (
-    @PrimaryKey(autoGenerate = true) var id: Int? = null,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
 
     @ColumnInfo(name = "description") var description: String? = null,
 

@@ -7,11 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
@@ -33,10 +29,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material.BottomNavigation;
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import nz.ac.uclive.jla201.studytracker.R
 import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication
 import nz.ac.uclive.jla201.studytracker.component.HomeScreen
 import nz.ac.uclive.jla201.studytracker.util.NavItem
@@ -54,7 +52,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             StudyTrackerTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -109,12 +106,16 @@ fun MainScreenView() {
 
 @Composable
 fun BottomNavigation(navController: NavController) {
+    NavItem.Settings.title = stringResource(R.string.settings)
+    NavItem.Home.title = stringResource(R.string.home)
+    NavItem.Statistics.title = stringResource(R.string.statistics)
+
     val navItems = listOf(
         NavItem.Settings,
         NavItem.Home,
         NavItem.Statistics
     )
-    BottomNavigation(backgroundColor = Color.White) {
+    BottomNavigation(modifier = Modifier.height(50.dp), backgroundColor = MaterialTheme.colorScheme.background) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
@@ -127,8 +128,8 @@ fun BottomNavigation(navController: NavController) {
                         fontSize = 9.sp
                     )
                 },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = Color.Black.copy(0.4f),
+                selectedContentColor = Color.Cyan,
+                unselectedContentColor = Color.Black,
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screen_route,
                 onClick = {
@@ -163,11 +164,7 @@ fun NavBarMap(navController: NavHostController) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun BottomNavigationPreview() {
-    MainScreenView()
-}
+
 
 fun returnToMain(activity: Activity, context: Context) {
     val intent = Intent(context, MainActivity::class.java)

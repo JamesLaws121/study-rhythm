@@ -1,14 +1,12 @@
 package nz.ac.uclive.jla201.studytracker.component
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +14,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -23,25 +22,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import nz.ac.uclive.jla201.studytracker.R
 import nz.ac.uclive.jla201.studytracker.StudyTrackerApplication
 import nz.ac.uclive.jla201.studytracker.Subject
 import nz.ac.uclive.jla201.studytracker.view_model.SessionViewModel
 import nz.ac.uclive.jla201.studytracker.view_model.SubjectViewModel
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
 @Composable
 fun StatisticsScreen() {
-    //val activity = LocalContext.current as Activity
     val context = LocalContext.current
     val subjectViewModel = SubjectViewModel(StudyTrackerApplication.subjectRepository)
     val sessionViewModel = SessionViewModel(StudyTrackerApplication.sessionRepository)
-
+    val sessions = sessionViewModel.sessions.observeAsState().value
     val subjects = subjectViewModel.subjects.observeAsState().value
+
     val subjectTimes = subjects?.map {
         sessionViewModel.calculateTimeForSubject(it.id).observeAsState().value
     }
@@ -75,39 +72,75 @@ fun StatisticsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white))
             .wrapContentSize(Alignment.Center)
+            .verticalScroll(rememberScrollState())
     ) {
 
         Text(
             text = stringResource(R.string.statistics),
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
-            fontSize = 50.sp
+            fontSize = 35.sp
         )
-        if (!subjects.isNullOrEmpty() && !subjectTimes.isNullOrEmpty()) {
-            PieChartScreen(colors, subjects, subjectTimes)
-            BarChartScreen(colors, dateTimes)
+
+
+        if (!subjects.isNullOrEmpty() && !sessions.isNullOrEmpty() && !subjectTimes.isNullOrEmpty()) {
+            Row(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.TopEnd)
+            ) {
+                Button(onClick = {
+                    sendStats(context, subjects, subjectTimes)
+                }) {
+                    Text(
+                        modifier = Modifier
+                            .width(200.dp),
+                        text = stringResource(R.string.share_your_stats),
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(8.dp),
+                        contentAlignment = Alignment.TopCenter
+                    ){
+                        PieChartScreen(colors, subjects, subjectTimes)
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(8.dp),
+                        contentAlignment = Alignment.TopCenter
+                    ){
+                        BarChartScreen(colors, dateTimes)
+                    }
+                }
+            } else {
+                Column() {
+                    PieChartScreen(colors, subjects, subjectTimes)
+                    BarChartScreen(colors, dateTimes)
+                }
+            }
+
+
+        } else {
+            Text(text = stringResource(R.string.you_dont_have_any_stats_yet),
+            textAlign = TextAlign.Center)
         }
+        Spacer(modifier = Modifier.height(50.dp))
     }
-    if (!subjects.isNullOrEmpty() && !subjectTimes.isNullOrEmpty()) {
-        Button(
-            onClick = {
-                sendStats(context, subjects, subjectTimes)
-            }) {
-            Text(modifier = Modifier
-                .width(200.dp),
-                text = "Share your stats",
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-    } else {
-        Text(text = stringResource(R.string.you_haven_t_got_any_stats_to_share))
-    }
-    
 }
 
 @Composable
@@ -146,12 +179,6 @@ internal fun BarChartScreen(colors : List<Color>, inputs:List<Int?>) {
     )
 }
 
-@Composable
-fun summaryScreen(colors : List<Color>, subjects : List<Subject>,
-                  subjectTimes:List<Float?>) {
-    //TODO
-}
-
 
 fun sendStats(context: Context, subjects : List<Subject>,
               subjectTimes:List<Float?>) {
@@ -163,14 +190,12 @@ fun sendStats(context: Context, subjects : List<Subject>,
         it ?: 0F
     }
     val timeValues:List<String> = inputValues.map {
-        it.toInt().toString() + " " + context.getString(R.string.hours) + " " +
-                ((it - it.toInt())*60).toInt().toString() + " " + context.getString(R.string.minutes)
+        String.format("%s hours %s minutes",it.toInt().toString(), ((it - it.toInt())*60).toInt().toString())
     }
 
-    var message = context.getString(R.string.check_out_my_studyrhythm_stats)
-
+    var message = context.getString(R.string.check_out_my_study_rhythm_stats)
     timeValues.forEachIndexed { index, value ->
-        message += inputTitles[index] + " " + value + "\n"
+        message += String.format("%s %s", inputTitles[index], value)
     }
 
     val sendIntent: Intent = Intent().apply {

@@ -42,7 +42,6 @@ class CreateSubjectActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StudyTrackerTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -65,16 +64,14 @@ fun SubjectFormScreenView() {
             .padding(10.dp)
             .fillMaxSize()
             .wrapContentSize(Alignment.TopCenter)
-            .background(colorResource(id = R.color.white))
     ) {
         Row(modifier = Modifier
             .wrapContentSize(Alignment.TopStart)
-            .background(colorResource(id = R.color.white))
         ) {
             Button(
                 onClick = { returnToMain(activity, context) }
             ) {
-                Text("Back")
+                Text(stringResource(R.string.back))
             }
         }
 
@@ -82,7 +79,6 @@ fun SubjectFormScreenView() {
         Row(modifier = Modifier
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
-            .background(colorResource(id = R.color.white))
         ) {
             Column(
                 modifier = Modifier
@@ -90,7 +86,6 @@ fun SubjectFormScreenView() {
             ) {
                 Text(
                     text = stringResource(R.string.create_subject),
-                    color = Color.Black,
                     textAlign = TextAlign.Center,
                     fontSize = 40.sp
                 )

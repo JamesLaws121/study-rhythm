@@ -38,7 +38,6 @@ import nz.ac.uclive.jla201.studytracker.view_model.SessionViewModel
 import nz.ac.uclive.jla201.studytracker.view_model.SubjectViewModel
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CreateSessionActivity : ComponentActivity() {
@@ -46,7 +45,6 @@ class CreateSessionActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StudyTrackerTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -71,13 +69,11 @@ fun SessionFormScreenView() {
         modifier = Modifier
             .padding(10.dp)
             .wrapContentSize(Alignment.TopCenter)
-            .background(colorResource(id = R.color.white))
             .verticalScroll(rememberScrollState())
             .height(IntrinsicSize.Max)
     ) {
         Row(modifier = Modifier
             .wrapContentSize(Alignment.TopStart)
-            .background(colorResource(id = R.color.white))
         ) {
             Button(
                 onClick = { returnToMain(activity, context) }
@@ -89,7 +85,6 @@ fun SessionFormScreenView() {
         Row(modifier = Modifier
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
-            .background(colorResource(id = R.color.white))
         ) {
             Column(
                 modifier = Modifier
@@ -103,7 +98,6 @@ fun SessionFormScreenView() {
                         .wrapContentSize(Alignment.Center)
                         .padding(10.dp),
                     text = stringResource(R.string.create_session),
-                    color = Color.Black,
                     textAlign = TextAlign.Center,
                     fontSize = 40.sp
                 )
@@ -130,7 +124,6 @@ fun SessionFormScreenView() {
                 ) {
                     Text(
                         text = stringResource(R.string.choose_subject),
-                        color = Color.Black,
                         textAlign = TextAlign.Center,
                         fontSize = 25.sp
                     )
@@ -138,7 +131,7 @@ fun SessionFormScreenView() {
                     if (!subjects.isNullOrEmpty()) {
                         LazyColumn(
                             modifier = Modifier
-                                .border(1.dp, Color.Black)
+                                .border(1.dp, MaterialTheme.colorScheme.primary)
                                 .wrapContentSize(Alignment.Center)
                                 .verticalScroll(rememberScrollState())
                                 .heightIn(25.dp, 175.dp)
@@ -148,9 +141,9 @@ fun SessionFormScreenView() {
                                 val selected = selectedSubject == subject.id
                                 Box(
                                     Modifier
-                                        .border(1.dp, Color.Black)
+                                        .border(1.dp, MaterialTheme.colorScheme.primary)
                                         .fillMaxWidth()
-                                        .background(if (selected) Color.Cyan else Color.White)
+                                        .background(if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
                                         .selectable(
                                             selected = selected,
                                             onClick = { selectedSubject = subject.id }
@@ -160,7 +153,8 @@ fun SessionFormScreenView() {
                                         modifier = Modifier.padding(10.dp),
                                         text = subject.name,
                                         textAlign = TextAlign.Center,
-                                        fontSize = 20.sp
+                                        fontSize = 20.sp,
+                                        color = (if (selected) Color.White else Color.Black)
                                     )
                                 }
 
@@ -172,7 +166,6 @@ fun SessionFormScreenView() {
                                 .align(Alignment.CenterHorizontally)
                                 .fillMaxWidth(),
                             text = stringResource(R.string.no_subjects_found),
-                            color = Color.Cyan,
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp
                         )
@@ -331,10 +324,6 @@ fun SessionFormScreenView() {
 private fun createSession(description: String, startDate: LocalDate, startTime : LocalTime,
                           durationHourString: String, durationMinuteString: String, subjectId: Int, activity: Activity, context: Context) {
     val sessionViewModel = SessionViewModel(sessionRepository)
-
-
-
-
 
     val durationTime = if(durationHourString.isNotEmpty()){ durationHourString.toFloat() }
     else {0F} + if (durationMinuteString.isNotEmpty()){ durationMinuteString.toFloat() }
