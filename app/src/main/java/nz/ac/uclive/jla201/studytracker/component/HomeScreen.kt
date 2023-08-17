@@ -152,22 +152,60 @@ fun HomeScreen(){
 
 @Composable
 fun SubjectList(subjects: List<Subject>) {
+    val openDialog = remember { mutableStateOf(false) }
+    var selectedSubject by remember { mutableStateOf(subjects[0]) }
+
     LazyColumn(modifier = Modifier
         .verticalScroll(rememberScrollState())
         .padding(10.dp)
         .height(125.dp)
         .border(1.dp, Color.Black)) {
         items(subjects) { subject ->
+            val selected = selectedSubject == subject
             Box(
                 Modifier
                     .padding(10.dp)
-                    .fillMaxWidth()){
+                    .fillMaxWidth()
+                    .selectable(
+                        selected = selected,
+                        onClick = {
+                            selectedSubject = subject
+                            openDialog.value = true
+                        }
+                    )){
                 Text(
                     text = subject.name.orEmpty(),
                     fontSize = 20.sp,
                 )
             }
         }
+    }
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                openDialog.value = false
+            },
+            title = {
+                Text(stringResource(R.string.subject_description))
+            },
+            text = {
+                Column() {
+                    Text(text = selectedSubject.name)
+                    selectedSubject.description?.let { Text(text = it) }
+                }
+
+            },
+            confirmButton = {
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                    }) {
+                    Text(stringResource(R.string.dismiss))
+                }
+            }
+        )
     }
 }
 
