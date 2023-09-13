@@ -11,6 +11,3 @@ Gradle
 
 ## Authors and acknowledgment
 Author - James Laws
-
-## Project status
-Currently in progress
